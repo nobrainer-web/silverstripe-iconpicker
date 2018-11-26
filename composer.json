@@ -1,0 +1,15 @@
+{
+    "name": "nobrainerweb/silverstripe-iconpicker",
+    "description": "svg iconpicker field",
+    "type": "silverstripe-vendormodule",
+    "extra": {
+        "expose": [
+            "client"
+        ]
+    },
+    "autoload": {
+        "psr-4": {
+            "NobrainerWeb\\IconPicker\\": "src/"
+        }
+    }
+}

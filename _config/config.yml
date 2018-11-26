@@ -1,0 +1,8 @@
+---
+Name: iconpicker-config
+---
+NobrainerWeb\IconPicker\Fields\IconField:
+  icon_source_folder: 'public/images/icons/material/SVG'
+
+NobrainerWeb\IconPicker\ORM\Icon:
+  icon_source_folder: 'public/images/icons/material/SVG'
