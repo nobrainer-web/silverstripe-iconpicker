@@ -4,15 +4,11 @@ namespace NobrainerWeb\IconPicker\ORM;
 
 use NobrainerWeb\IconPicker\Fields\IconField;
 use NobrainerWeb\IconPicker\Helper\Helper;
-use SilverStripe\Control\Director;
-use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Path;
-use SilverStripe\ORM\Connect\MySQLDatabase;
-use SilverStripe\ORM\DB;
-use SilverStripe\ORM\FieldType\DBField;
+use SilverStripe\ORM\FieldType\DBVarchar;
 use SilverStripe\ORM\ValidationException;
 
-class Icon extends DBField
+class Icon extends DBVarchar
 {
     /**
      * Where the SVG's are located for the frontend
@@ -28,32 +24,6 @@ class Icon extends DBField
         'Name' => 'Text',
         'SVG'  => 'HTMLText',
     ];
-
-    /**
-     * (non-PHPdoc)
-     *
-     * @see DBField::requireField()
-     */
-    public function requireField()
-    {
-        $charset = Config::inst()->get(MySQLDatabase::class, 'charset');
-        $collation = Config::inst()->get(MySQLDatabase::class, 'collation');
-
-        $parts = [
-            'datatype'      => 'varchar',
-            'precision'     => 25,
-            'character set' => $charset,
-            'collate'       => $collation,
-            'arrayValue'    => $this->arrayValue
-        ];
-
-        $values = [
-            'type'  => 'varchar',
-            'parts' => $parts
-        ];
-
-        DB::require_field($this->tableName, $this->name, $values);
-    }
 
     public function setSourceFolder($folder)
     {
@@ -78,11 +48,6 @@ class Icon extends DBField
     public function scaffoldFormField($title = null, $params = null)
     {
         return IconField::create($this->name, $title);
-    }
-
-    public function forTemplate()
-    {
-        return $this->SVG();
     }
 
     /**
