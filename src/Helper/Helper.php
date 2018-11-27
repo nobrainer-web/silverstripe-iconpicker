@@ -9,6 +9,8 @@
 namespace NobrainerWeb\IconPicker\Helper;
 
 
+use SilverStripe\Control\Director;
+
 class Helper
 {
     /**
@@ -31,5 +33,29 @@ class Helper
         }
 
         return $src;
+    }
+
+    /**
+     * @param $path
+     * @return string
+     */
+    public static function getAbsoluteFolderPath($path)
+    {
+        return Director::absoluteBaseURL() . '/'.  $path;
+    }
+
+    /**
+     * @param $path
+     * @return string
+     */
+    public static function getRelativeFolderPath($path)
+    {
+        return Director::baseFolder() . '/'. $path;
+    }
+
+    public static function getSVGContents($path)
+    {
+        // TODO error handling
+        return file_get_contents($path);
     }
 }

@@ -3,6 +3,7 @@
 namespace NobrainerWeb\IconPicker\ORM;
 
 use NobrainerWeb\IconPicker\Fields\IconField;
+use NobrainerWeb\IconPicker\Helper\Helper;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Path;
@@ -54,6 +55,21 @@ class Icon extends DBField
         DB::require_field($this->tableName, $this->name, $values);
     }
 
+    public function setSourceFolder($folder)
+    {
+        self::config()->update('icon_source_folder', $folder);
+
+        return $this;
+    }
+
+    /***
+     * @return string
+     */
+    public function getSourceFolder()
+    {
+        return self::config()->get('icon_source_folder');
+    }
+
     /**
      * @param null $title
      * @param null $params
@@ -75,11 +91,10 @@ class Icon extends DBField
      */
     public function SVG()
     {
-        $folder = self::config()->get('icon_source_folder');
         $icon = $this->Value;
-        $path = Director::absoluteBaseURL() . Path::join($folder, $icon) . '.svg';
+        $path = Helper::getAbsoluteFolderPath(Path::join($this->getSourceFolder(), $icon . '.svg'));
 
-        return file_get_contents($path);
+        return Helper::getSVGContents($path);
     }
 
 }
