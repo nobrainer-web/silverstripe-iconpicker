@@ -1,1 +1,3 @@
 da:
+  NobrainerWeb\IconPicker\ORM\Icon:
+    DefaultFieldDescription: 'Klik her for at se alle ikoner'

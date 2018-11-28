@@ -1,6 +1,13 @@
-.nw-icon-picker ~ .chosen-container {
-	display: none;
-}
 .nw-icon-picker ~ .select2 {
 	width: 100% !important;
+}
+.nw-icon-textfield__inner {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+.nw-icon-textfield__image {
+	width: 24px;
+	height: 24px;
+	margin-right: 10px;
 }

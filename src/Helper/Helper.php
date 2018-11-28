@@ -9,7 +9,9 @@
 namespace NobrainerWeb\IconPicker\Helper;
 
 
+use NobrainerWeb\IconPicker\ORM\Icon;
 use SilverStripe\Control\Director;
+use SilverStripe\Core\Config\Config;
 
 class Helper
 {
@@ -57,5 +59,25 @@ class Helper
     {
         // TODO error handling
         return file_get_contents($path);
+    }
+
+    /**
+     * @param $field
+     * @return string
+     */
+    public static function getFieldDescription($field)
+    {
+        $link = self::getAbsoluteFolderPath(Icon::config()->get('all_icons_file'));
+        $linkText = _t(Icon::class . '.DefaultFieldDescription', 'Click here to view all available icons');
+
+        return '<a href="' . $link . '" target="_blank">' . $linkText . '</a>';
+    }
+
+    /**
+     * @return string
+     */
+    public static function getCMSSourceFolder()
+    {
+        return Config::inst()->get(Icon::class, 'cms_icon_source_folder');
     }
 }

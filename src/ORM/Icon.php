@@ -3,6 +3,7 @@
 namespace NobrainerWeb\IconPicker\ORM;
 
 use NobrainerWeb\IconPicker\Fields\IconField;
+use NobrainerWeb\IconPicker\Fields\IconTextField;
 use NobrainerWeb\IconPicker\Helper\Helper;
 use SilverStripe\Core\Path;
 use SilverStripe\ORM\FieldType\DBVarchar;
@@ -15,7 +16,14 @@ class Icon extends DBVarchar
      *
      * @config
      */
-    private static $icon_source_folder;
+    private static $template_icon_source_folder;
+
+    /**
+     * A html file that shows all available icons. Used for setDescription on formfields
+     *
+     * @config
+     */
+    private static $all_icons_file;
 
     /**
      * @var array
@@ -27,7 +35,7 @@ class Icon extends DBVarchar
 
     public function setSourceFolder($folder)
     {
-        self::config()->update('icon_source_folder', $folder);
+        self::config()->update('template_icon_source_folder', $folder);
 
         return $this;
     }
@@ -37,17 +45,17 @@ class Icon extends DBVarchar
      */
     public function getSourceFolder()
     {
-        return self::config()->get('icon_source_folder');
+        return self::config()->get('template_icon_source_folder');
     }
 
     /**
      * @param null $title
      * @param null $params
-     * @return IconField
+     * @return IconTextField
      */
     public function scaffoldFormField($title = null, $params = null)
     {
-        return IconField::create($this->name, $title);
+        return IconTextField::create($this->name, $title);
     }
 
     /**

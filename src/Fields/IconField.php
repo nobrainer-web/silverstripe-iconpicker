@@ -19,20 +19,6 @@ use SilverStripe\View\Requirements;
 
 class IconField extends GroupedDropdownField
 {
-    /**
-     * Where the SVG's are located for the backend
-     *
-     * @config
-     */
-    private static $icon_source_folder;
-
-    public function __construct($name, $title = null)
-    {
-        parent::__construct($name, $title);
-
-        $this->setEmptyString(_t(__CLASS__ . '.EmptyString', 'Select an icon...'));
-    }
-
     public function getSource()
     {
         return ['icons' => $this->generateSource()];
@@ -43,7 +29,7 @@ class IconField extends GroupedDropdownField
      */
     public function getSourceFolder()
     {
-        $path = self::config()->get('icon_source_folder');
+        $path = Helper::getCMSSourceFolder();
 
         $this->extend('updateSourceFolder', $path);
 
@@ -52,7 +38,7 @@ class IconField extends GroupedDropdownField
 
     private function generateSource()
     {
-        $folder = Helper::getRelativeFolderPath(self::config()->get('icon_source_folder')); // TODO cache these values
+        $folder = Helper::getRelativeFolderPath($this->getSourceFolder()); // TODO cache these values
 
         return Helper::getSVGFiles($folder);
     }
@@ -149,7 +135,9 @@ class IconField extends GroupedDropdownField
         Requirements::javascript('nobrainerweb/silverstripe-iconpicker:client/nw-iconpicker.js');
         Requirements::css('nobrainerweb/silverstripe-iconpicker:client/nw-iconpicker.css');
 
-        $this->addExtraClass('nw-icon-picker js-nw-icon-picker select2 no-chzn');
+        $this->addExtraClass('nw-icon-picker js-nw-icon-picker select2 no-chosen');
+        $this->setDescription(Helper::getFieldDescription($this));
+        $this->setEmptyString(_t(__CLASS__ . '.EmptyString', 'Select an icon...'));
 
         return parent::Field($properties);
     }
