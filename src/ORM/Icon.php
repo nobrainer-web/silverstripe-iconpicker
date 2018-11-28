@@ -19,6 +19,13 @@ class Icon extends DBVarchar
     private static $template_icon_source_folder;
 
     /**
+     * Where the SVG's are located for the CMS
+     *
+     * @config
+     */
+    private static $cms_icon_source_folder;
+
+    /**
      * A html file that shows all available icons. Used for setDescription on formfields
      *
      * @config
@@ -64,10 +71,16 @@ class Icon extends DBVarchar
      */
     public function SVG()
     {
+        return $this->getSVGContents();
+    }
+
+    public function getSVGContents()
+    {
         $icon = $this->Value;
         $path = Helper::getAbsoluteFolderPath(Path::join($this->getSourceFolder(), $icon . '.svg'));
 
-        return Helper::getSVGContents($path);
+        // TODO error handling
+        return file_get_contents($path);
     }
 
 }

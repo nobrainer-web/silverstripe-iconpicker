@@ -55,24 +55,6 @@ class Helper
         return Director::baseFolder() . '/'. $path;
     }
 
-    public static function getSVGContents($path)
-    {
-        // TODO error handling
-        return file_get_contents($path);
-    }
-
-    /**
-     * @param $field
-     * @return string
-     */
-    public static function getFieldDescription($field)
-    {
-        $link = self::getAbsoluteFolderPath(Icon::config()->get('all_icons_file'));
-        $linkText = _t(Icon::class . '.DefaultFieldDescription', 'Click here to view all available icons');
-
-        return '<a href="' . $link . '" target="_blank">' . $linkText . '</a>';
-    }
-
     /**
      * @return string
      */

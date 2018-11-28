@@ -10,6 +10,7 @@ namespace NobrainerWeb\IconPicker\Fields;
 
 
 use NobrainerWeb\IconPicker\Helper\Helper;
+use NobrainerWeb\IconPicker\Traits\FieldTraits;
 use SilverStripe\Core\Path;
 use SilverStripe\Forms\GroupedDropdownField;
 use SilverStripe\Forms\Validator;
@@ -19,6 +20,8 @@ use SilverStripe\View\Requirements;
 
 class IconField extends GroupedDropdownField
 {
+    use FieldTraits;
+
     public function getSource()
     {
         return ['icons' => $this->generateSource()];
@@ -51,9 +54,27 @@ class IconField extends GroupedDropdownField
      */
     public function validate($validator)
     {
-        // TODO check if file exists
+        // Check if valid value is given
+        $selected = $this->Value();
+        $path = Path::join($this->getSourceFolder(), $selected . '.svg');
+        $path = Helper::getRelativeFolderPath($path);
 
-        return parent::validate($validator);
+        // check if file exists
+        if(file_exists($path)){
+            return true;
+        }
+
+        // Fail
+        $validator->validationError(
+            $this->name,
+            _t(
+                'SilverStripe\\Forms\\DropdownField.SOURCE_VALIDATION',
+                'Please select a value within the list provided. {value} is not a valid option',
+                ['value' => $selected]
+            ),
+            'validation'
+        );
+        return false;
     }
 
     /**
@@ -118,7 +139,6 @@ class IconField extends GroupedDropdownField
         Requirements::css('nobrainerweb/silverstripe-iconpicker:client/nw-iconpicker.css');
 
         $this->addExtraClass('nw-icon-picker js-nw-icon-picker select2 no-chosen');
-        $this->setDescription(Helper::getFieldDescription($this));
         $this->setEmptyString(_t(__CLASS__ . '.EmptyString', 'Select an icon...'));
 
         return parent::Field($properties);

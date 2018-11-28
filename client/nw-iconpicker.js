@@ -25,38 +25,34 @@
 				var field = $(this),
 					img = field.siblings('img').first(),
 					src = img.attr('src');
+
 				if(!checkFieldValue(field)){
 					toggleImg(field, img);
-					return;
-				}
-				src = src.replace(/(.*)\/.*(\.svg)/i, '$1/' + field.val() + '$2');
+				} else {
+					src = src.replace(/(.*)\/.*(\.svg)/i, '$1/' + field.val() + '$2');
 
-				img.attr('src', src);
+					img.attr('src', src);
 
-				setTimeout(function(){
+					//setTimeout(function(){
 					toggleImg(field, img);
 					//field.removeClass('changed'); // fix bug
-				}, 700);
+					//}, 700);
+				}
 			},
 			onmatch: function () {
+				this._super();
 				this.updateIcon();
 			},
 			onchange: function () {
-				this.updateIcon();
-			},/*
-			onclick: function () {
+				this._super();
 				this.updateIcon();
 			},
-			oninput: function () {
-				this.updateIcon();
-			},*/
-			onkeyup: function () {
-				var that = this;
-				setTimeout(function(){
-					that.updateIcon();
-				}, 600);
+			onkeyup: function (e) {
+				// this crashed "save" functionality
+				// this.updateIcon();
 			},
 			onpaste: function () {
+				this._super();
 				this.updateIcon();
 			}
 		});
