@@ -32,28 +32,9 @@ class IconTextField extends TextField
      */
     public function validate($validator)
     {
-        // Check if valid value is given
-        $selected = $this->Value();
-        $path = $this->getSVGPath();
-        $path = Helper::getRelativeFolderPath($path);
+        // TODO check if file exists
 
-        // check if file exists
-        if (file_exists($path)) {
-            return true;
-        }
-
-        // Fail
-        $validator->validationError(
-            $this->name,
-            _t(
-                'SilverStripe\\Forms\\DropdownField.SOURCE_VALIDATION',
-                'Please select a value within the list provided. {value} is not a valid option',
-                ['value' => $selected]
-            ),
-            'validation'
-        );
-
-        return false;
+        return parent::validate($validator);
     }
 
     /***
