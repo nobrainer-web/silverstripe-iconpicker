@@ -40,11 +40,9 @@
 			},
 			onmatch: function () {
 				this.updateIcon();
-				this._super();
 			},
 			onchange: function () {
 				this.updateIcon();
-				this._super();
 			},/*
 			onclick: function () {
 				this.updateIcon();
@@ -53,12 +51,13 @@
 				this.updateIcon();
 			},*/
 			onkeyup: function () {
-				this.updateIcon();
-				this._super();
+				var that = this;
+				setTimeout(function(){
+					that.updateIcon();
+				}, 600);
 			},
 			onpaste: function () {
 				this.updateIcon();
-				this._super();
 			}
 		});
 		function checkFieldValue(field) {
