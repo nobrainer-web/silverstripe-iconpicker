@@ -1,5 +1,5 @@
 {
-    "name": "nobrainerweb/silverstripe-iconpicker",
+    "name": "nobrainer-web/silverstripe-iconpicker",
     "description": "svg iconpicker field",
     "type": "silverstripe-vendormodule",
     "extra": {
