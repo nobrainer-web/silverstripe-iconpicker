@@ -37,7 +37,7 @@ class IconTextField extends TextField
      */
     private function getSVGPath()
     {
-        return Path::join(Helper::getCMSSourceFolder(), $this->Value() . '.svg');
+        return Path::join(Helper::getCMSSourceFolder(), $this->getValue() . '.svg');
     }
 
     public function Field($properties = [])

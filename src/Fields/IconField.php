@@ -57,7 +57,7 @@ class IconField extends GroupedDropdownField
         $result = ValidationResult::create();
 
         // Check if valid value is given
-        $selected = $this->Value();
+        $selected = $this->getValue();
         if ($selected === null || $selected === '') {
             return $result;
         }
@@ -110,7 +110,7 @@ class IconField extends GroupedDropdownField
     protected function getSingleFieldOption($value, $title)
     {
         // Check selection
-        $selected = $this->isSelectedValue($value, $this->Value());
+        $selected = $this->isSelectedValue($value, $this->getValue());
 
         // Check disabled
         $disabled = false;
