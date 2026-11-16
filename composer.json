@@ -1,5 +1,5 @@
 {
-    "name": "nobrainer-web/silverstripe-iconpicker",
+    "name": "nobrainerweb/silverstripe-iconpicker",
     "description": "svg iconpicker field",
     "type": "silverstripe-vendormodule",
     "extra": {
@@ -12,5 +12,10 @@
             "NobrainerWeb\\IconPicker\\": "src/"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.3",
+        "silverstripe/framework": "^6",
+        "silverstripe/admin": "^3"
+    }
 }
