@@ -8,13 +8,10 @@
 
 namespace NobrainerWeb\IconPicker\Fields;
 
-use NobrainerWeb\Client\Config;
 use NobrainerWeb\IconPicker\Helper\Helper;
-use NobrainerWeb\IconPicker\ORM\Icon;
 use NobrainerWeb\IconPicker\Traits\FieldTraits;
 use SilverStripe\Core\Path;
 use SilverStripe\Forms\TextField;
-use SilverStripe\Forms\Validator;
 use SilverStripe\View\Requirements;
 
 class IconTextField extends TextField
@@ -32,16 +29,9 @@ class IconTextField extends TextField
     /**
      * Validate this field
      *
-     * @param Validator $validator
+     * @param \SilverStripe\Forms\Validation\Validator $validator
      * @return bool
      */
-    public function validate($validator)
-    {
-        // TODO check if file exists
-
-        return parent::validate($validator);
-    }
-
     /***
      * @return string
      */

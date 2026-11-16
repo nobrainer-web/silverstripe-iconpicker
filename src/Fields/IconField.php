@@ -9,13 +9,13 @@
 namespace NobrainerWeb\IconPicker\Fields;
 
 
+use SilverStripe\Model\List\ArrayList;
+use SilverStripe\Model\ArrayData;
 use NobrainerWeb\IconPicker\Helper\Helper;
 use NobrainerWeb\IconPicker\Traits\FieldTraits;
 use SilverStripe\Core\Path;
+use SilverStripe\Core\Validation\ValidationResult;
 use SilverStripe\Forms\GroupedDropdownField;
-use SilverStripe\Forms\Validator;
-use SilverStripe\ORM\ArrayList;
-use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
 
 class IconField extends GroupedDropdownField
@@ -49,32 +49,36 @@ class IconField extends GroupedDropdownField
     /**
      * Validate this field
      *
-     * @param Validator $validator
+     * @param \SilverStripe\Forms\Validation\Validator $validator
      * @return bool
      */
-    public function validate($validator)
+    public function validate(): ValidationResult
     {
+        $result = ValidationResult::create();
+
         // Check if valid value is given
         $selected = $this->Value();
+        if ($selected === null || $selected === '') {
+            return $result;
+        }
         $path = Path::join($this->getSourceFolder(), $selected . '.svg');
         $path = Helper::getRelativeFolderPath($path);
 
         // check if file exists
-        if(file_exists($path)){
-            return true;
+        if (!file_exists($path)) {
+            $result->addFieldError(
+                $this->getName(),
+                _t(
+                    'SilverStripe\\Forms\\DropdownField.SOURCE_VALIDATION',
+                    'Please select a value within the list provided. {value} is not a valid option',
+                    ['value' => $selected]
+                ),
+                'validation'
+            );
         }
+        $this->extend('updateValidate', $result);
 
-        // Fail
-        $validator->validationError(
-            $this->name,
-            _t(
-                'SilverStripe\\Forms\\DropdownField.SOURCE_VALIDATION',
-                'Please select a value within the list provided. {value} is not a valid option',
-                ['value' => $selected]
-            ),
-            'validation'
-        );
-        return false;
+        return $result;
     }
 
     /**
@@ -82,7 +86,7 @@ class IconField extends GroupedDropdownField
      *
      * @param mixed $valueOrGroup Value of item, or title of group
      * @param string|array $titleOrOptions Title of item, or options in grouip
-     * @return ArrayData Data for this item
+     * @return \SilverStripe\Model\ArrayData Data for this item
      */
     protected function getFieldOption($valueOrGroup, $titleOrOptions)
     {
@@ -129,8 +133,7 @@ class IconField extends GroupedDropdownField
 
     public function Field($properties = [])
     {
-        Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
-        Requirements::javascript('silverstripe/admin: thirdparty/jquery-entwine/dist/jquery.entwine-dist.js');
+        // jQuery and entwine are part of the SS6 admin bundle (silverstripe/admin client/dist/js/vendor.js)
 
         Requirements::css('nobrainerweb/silverstripe-iconpicker:client/select2/css/select2.min.css');
         Requirements::javascript('nobrainerweb/silverstripe-iconpicker:client/select2/js/select2.full.min.js');

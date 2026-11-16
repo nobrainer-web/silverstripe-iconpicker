@@ -2,12 +2,11 @@
 
 namespace NobrainerWeb\IconPicker\ORM;
 
-use NobrainerWeb\IconPicker\Fields\IconField;
 use NobrainerWeb\IconPicker\Fields\IconTextField;
 use NobrainerWeb\IconPicker\Helper\Helper;
 use SilverStripe\Core\Path;
+use SilverStripe\Forms\FormField;
 use SilverStripe\ORM\FieldType\DBVarchar;
-use SilverStripe\ORM\ValidationException;
 
 class Icon extends DBVarchar
 {
@@ -42,7 +41,7 @@ class Icon extends DBVarchar
 
     public function setSourceFolder($folder)
     {
-        self::config()->update('template_icon_source_folder', $folder);
+        static::config()->set('template_icon_source_folder', $folder);
 
         return $this;
     }
@@ -60,14 +59,14 @@ class Icon extends DBVarchar
      * @param null $params
      * @return IconTextField
      */
-    public function scaffoldFormField($title = null, $params = null)
+    public function scaffoldFormField(?string $title = null, array $params = []): ?FormField
     {
         return IconTextField::create($this->name, $title);
     }
 
     /**
      * @return bool|string
-     * @throws ValidationException
+     * @throws \SilverStripe\Core\Validation\ValidationException
      */
     public function SVG()
     {
@@ -77,10 +76,22 @@ class Icon extends DBVarchar
     public function getSVGContents()
     {
         $icon = $this->Value;
-        $path = Helper::getAbsoluteFolderPath(Path::join($this->getSourceFolder(), $icon . '.svg'));
+        if (!$icon) {
+            return '';
+        }
+        $relative = Path::join($this->getSourceFolder(), $icon . '.svg');
 
-        // TODO error handling
-        return file_get_contents($path);
+        // Read from disk. (Before SS6 this did an HTTP request to absoluteBaseURL() . '/' . $relative,
+        // which only worked when the web root was the project root and gave warnings otherwise.)
+        $file = Helper::getRelativeFolderPath($relative);
+        if (is_file($file)) {
+            return file_get_contents($file);
+        }
+
+        // Fallback for source folders that are only reachable over HTTP
+        $contents = @file_get_contents(Helper::getAbsoluteFolderPath($relative));
+
+        return $contents === false ? '' : $contents;
     }
 
 }
